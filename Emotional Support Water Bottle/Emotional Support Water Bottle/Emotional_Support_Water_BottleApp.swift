@@ -12,7 +12,8 @@ import SwiftData
 struct Emotional_Support_Water_BottleApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            HydrationEntry.self,
+            UserPreferences.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -22,10 +23,13 @@ struct Emotional_Support_Water_BottleApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    @State private var hydrationManager = HydrationManager()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environment(hydrationManager)
         }
         .modelContainer(sharedModelContainer)
     }

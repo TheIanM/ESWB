@@ -7,6 +7,7 @@ xcuserdata/
 
 #misc
 Examples
+.ds_store
 
 ## Obj-C/Swift specific
 *.hmap
