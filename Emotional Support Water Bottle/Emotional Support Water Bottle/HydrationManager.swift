@@ -34,6 +34,12 @@ final class HydrationManager {
         progress >= 1.0
     }
     
+    /// Reschedule reminders based on current state
+    private func rescheduleReminders() {
+        guard let prefs = preferences else { return }
+        ReminderScheduler.scheduleFromPreferences(prefs, sipsRemaining: sipsRemaining)
+    }
+    
     /// Remaining mL to hit goal
     var remainingML: Double {
         guard let prefs = preferences else { return 0 }
@@ -59,6 +65,9 @@ final class HydrationManager {
         ctx.insert(entry)
         
         todayIntakeML += amount
+        
+        // Reschedule reminders (fewer remaining now, or cancel if goal met)
+        rescheduleReminders()
     }
     
     // MARK: - Queries

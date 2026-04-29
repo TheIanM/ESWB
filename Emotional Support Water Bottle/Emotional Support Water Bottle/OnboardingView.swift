@@ -660,6 +660,14 @@ struct OnboardingView: View {
         try? modelContext.save()
         
         hydrationManager.configure(preferences: prefs, context: modelContext)
+        
+        // Request notification permission and schedule initial reminders
+        Task {
+            let granted = await NotificationManager.shared.requestPermission()
+            if granted {
+                ReminderScheduler.scheduleFromPreferences(prefs, sipsRemaining: hydrationManager.sipsRemaining)
+            }
+        }
     }
 }
 

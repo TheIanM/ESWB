@@ -30,6 +30,10 @@ struct Emotional_Support_Water_BottleApp: App {
         WindowGroup {
             RootView()
                 .environment(hydrationManager)
+                .task {
+                    // Request notification permission silently
+                    _ = await NotificationManager.shared.requestPermission()
+                }
         }
         .modelContainer(sharedModelContainer)
     }

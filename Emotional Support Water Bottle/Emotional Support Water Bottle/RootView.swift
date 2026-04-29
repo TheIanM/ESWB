@@ -29,6 +29,8 @@ struct RootView: View {
                 MainTabView()
                     .onAppear {
                         hydrationManager.configure(preferences: prefs, context: modelContext)
+                        // Schedule today's reminders
+                        ReminderScheduler.scheduleFromPreferences(prefs, sipsRemaining: hydrationManager.sipsRemaining)
                     }
             } else {
                 OnboardingView()

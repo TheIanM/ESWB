@@ -144,6 +144,18 @@ struct SettingsTab: View {
                     }
                 }
             }
+            
+            Button {
+                ReminderScheduler.scheduleTestReminder(personalityID: prefs.reminderPersonality)
+            } label: {
+                HStack {
+                    Label("Send Test Reminder", systemImage: "bell.badge")
+                    Spacer()
+                    Text("5 sec")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
     }
     
