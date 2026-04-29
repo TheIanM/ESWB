@@ -44,11 +44,19 @@
 - [ ] Write hydration data to HK on each log
 - [ ] Read mood data for personality-aware prompts
 
-## Phase 4: Reminder Personalities (NOT STARTED)
-- [ ] Design personality JSON schema
-- [ ] Create bundled personality files (Quotable Water, Gentle Parenting, Excited Dog, Passive Aggressive, Emotional Support, Water Facts)
-- [ ] Build personality engine — quote picker, mood-aware selection
-- [ ] Local notification scheduling
+## Phase 4: Reminder Personalities (IN PROGRESS)
+- [x] 4.1 Create bundled JSON files for each personality with short notification-friendly messages
+  - verify: 6 JSON files created, messages ~80 chars max ✅
+- [x] 4.2 Create PersonalityEngine — loads JSON, picks random messages, mood-aware for Emotional Support
+  - verify: compiles, loads personalities, avoids recent repeats ✅
+- [x] 4.3 Add personality picker to Settings tab
+  - verify: selection persists, shows checkmark on current personality ✅
+- [x] 4.4 Add personality selection step to onboarding flow
+  - verify: user picks personality during onboarding, saves to UserPreferences ✅
+- [x] 4.5 Add Personalities folder to Xcode project (drag into navigator)
+  - verify: JSON files included in app bundle ✅ (auto-detected)
+- [x] 4.6 Build + smoke test personality flow end-to-end
+  - verify: BUILD SUCCEEDED, onboarding saves selected personality ✅
 
 ## Phase 5: IAP Tip Jar (NOT STARTED)
 - [ ] Set up multiple non-consumable IAP products

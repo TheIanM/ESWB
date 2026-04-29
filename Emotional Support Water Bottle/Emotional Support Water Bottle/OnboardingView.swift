@@ -33,12 +33,16 @@ struct OnboardingView: View {
     // Step 5: Logging method
     @State private var loggingMethod: LoggingMethod = .button
     
-    // Step 6: Reminder schedule
+    // Step 6: Personality
+    @State private var selectedPersonality: String = "excited-dog"
+    private let personalityEngine = PersonalityEngine()
+    
+    // Step 7: Reminder schedule
     @State private var scheduleType: ScheduleType = .smartRandom
     @State private var reminderStartHour: Int = 7
     @State private var reminderEndHour: Int = 22
     
-    private let totalSteps = 7  // 0 through 6
+    private let totalSteps = 8  // 0 through 7
     
     var body: some View {
         ZStack {
@@ -61,7 +65,8 @@ struct OnboardingView: View {
                     goalStep.tag(3)
                     healthKitStep.tag(4)
                     loggingStep.tag(5)
-                    reminderStep.tag(6)
+                    personalityStep.tag(6)
+                    reminderStep.tag(7)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.easeInOut, value: currentStep)
@@ -472,7 +477,66 @@ struct OnboardingView: View {
         }
     }
     
-    // MARK: - Step 6: Reminders
+    // MARK: - Step 6: Personality
+    
+    private var personalityStep: some View {
+        VStack(spacing: 24) {
+            Spacer()
+            
+            Image(systemName: "bubble.left.fill")
+                .font(.system(size: 56))
+                .foregroundStyle(.cyan)
+            
+            Text("Reminder Personality")
+                .font(.title.bold())
+                .foregroundStyle(.white)
+            
+            Text("How should your reminders talk to you?")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.6))
+            
+            ScrollView {
+                VStack(spacing: 12) {
+                    let personalities = personalityEngine.loadAll()
+                    ForEach(personalities) { personality in
+                        Button {
+                            selectedPersonality = personality.id
+                        } label: {
+                            HStack {
+                                Image(systemName: personality.icon)
+                                    .foregroundStyle(Color(hex: "00B4D8"))
+                                    .frame(width: 28)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(personality.name)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(.white)
+                                    Text(personality.description)
+                                        .font(.caption)
+                                        .foregroundStyle(.white.opacity(0.6))
+                                        .lineLimit(1)
+                                }
+                                Spacer()
+                                if selectedPersonality == personality.id {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.cyan)
+                                }
+                            }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(selectedPersonality == personality.id ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
+                            )
+                        }
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+            
+            Spacer()
+        }
+    }
+    
+    // MARK: - Step 7: Reminders
     
     private var reminderStep: some View {
         VStack(spacing: 24) {
@@ -582,7 +646,7 @@ struct OnboardingView: View {
         prefs.activityLevel = activityLevel
         prefs.bottleSizeML = bottleSizeML
         prefs.dailyGoalML = dailyGoalML
-        prefs.reminderPersonality = "excited-dog"
+        prefs.reminderPersonality = selectedPersonality
         prefs.reminderScheduleType = scheduleType
         prefs.reminderIntervalHours = 1.0
         prefs.reminderStartHour = reminderStartHour

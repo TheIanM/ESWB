@@ -1,0 +1,58 @@
+{
+  "id": "emotional-support",
+  "name": "Emotional Support",
+  "description": "Mood-aware reminders that meet you where you are",
+  "icon": "heart.circle.fill",
+  "messages": [
+    "Hey, you're doing better than you think. Sip some water 💙",
+    "One sip at a time. That's all it takes 🌊",
+    "You showed up today. That matters. Now hydrate 💧",
+    "Taking care of your body is taking care of you 💚",
+    "Sending you calm energy and a water reminder 🌿",
+    "Small steps. Small sips. Big love 💙",
+    "You made it this far. Have some water, you've earned it 🌟",
+    "Here's a little hydration hug 💧🤗",
+    "You matter. Your hydration matters too 💙",
+    "Whatever you're feeling right now, water helps 🌊",
+    "A sip of water, a moment of peace 💧",
+    "You're allowed to pause. Drink some water 💙",
+    "Hydrating is a quiet way to be kind to yourself 🌿",
+    "Breathe. Sip. Repeat. You're doing great 🌊",
+    "This is your gentle nudge. Water is self-care 💧",
+    "You deserve care. Starting with this glass 💙",
+    "No pressure. Just a friendly sip reminder 🌟",
+    "Water can't fix everything but it's a good start 💧",
+    "Proud of you for being here. Now drink up 💙",
+    "Your body is doing its best. Help it out 💧"
+  ],
+  "moodResponses": {
+    "down": [
+      "Hey, it's okay. Let's start with one small sip 💙",
+      "Rough day? Water won't fix it, but it's a start 💧",
+      "Sending you something gentle. A sip of water 🌊",
+      "You don't have to do much. Just one sip 💙",
+      "It's okay to just exist. And hydrate. 💧"
+    ],
+    "anxious": [
+      "Let's take a breath. And a sip of water 🌊",
+      "One sip at a time. You're safe here 💙",
+      "Ground yourself: feel the water, drink it slowly 💧",
+      "Worry can wait. Water can't. Small sip? 🌿",
+      "Here's something you can control: this sip 💧"
+    ],
+    "happy": [
+      "You're glowing! Keep it going with some water ✨💧",
+      "Great mood + great hydration = unstoppable 🌊",
+      "Riding high? Stay hydrated to keep it going 💧",
+      "Love this energy! Water will keep it flowing 💙",
+      "Happy and hydrated is the vibe ✨💧"
+    ],
+    "energetic": [
+      "All that energy? Fuel it with water! ⚡💧",
+      "You're on fire! Don't forget hydration though 🔥",
+      "Channel that energy into… drinking water! 💪💧",
+      "High energy needs high hydration. Drink up! ⚡",
+      "Go go go! But also… sip sip sip 💧🏃"
+    ]
+  }
+}
