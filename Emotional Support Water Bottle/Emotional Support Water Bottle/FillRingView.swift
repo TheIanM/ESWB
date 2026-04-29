@@ -2,26 +2,27 @@
 //  FillRingView.swift
 //  Emotional Support Water Bottle
 //
-//  Circular progress ring showing daily hydration progress.
-//  Draws two arcs (background + filled) in a Canvas.
+//  Circular progress ring designed to surround the water bottle.
+//  Draws a thick ring with rounded end caps.
+//  Designed to be placed in a ZStack behind/around the bottle view.
 //
 
 import SwiftUI
 
 struct FillRingView: View {
     let progress: Double  // 0.0 to 1.0+
-    let line_width: CGFloat
+    let lineWidth: CGFloat
     
-    private let background_color = Color.white.opacity(0.15)
-    private let fill_color = Color.cyan
+    private let bgColor = Color.white.opacity(0.12)
+    private let fillColor = Color.cyan
     
     var body: some View {
         Canvas { context, size in
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
-            let radius = (min(size.width, size.height) - line_width) / 2
+            let radius = (min(size.width, size.height) - lineWidth) / 2
             
             // Background ring
-            let bg_path = Path { p in
+            let bgPath = Path { p in
                 p.addArc(
                     center: center,
                     radius: radius,
@@ -30,13 +31,13 @@ struct FillRingView: View {
                     clockwise: false
                 )
             }
-            context.stroke(bg_path, with: .color(background_color), lineWidth: line_width)
+            context.stroke(bgPath, with: .color(bgColor), lineWidth: lineWidth)
             
-            // Filled arc — clamped to 1.0 for display
+            // Filled arc — starts at top (-90°), sweeps clockwise
             let fillFraction = min(progress, 1.0)
             if fillFraction > 0 {
                 let endAngle = -90 + (360 * fillFraction)
-                let fill_path = Path { p in
+                let fillPath = Path { p in
                     p.addArc(
                         center: center,
                         radius: radius,
@@ -46,9 +47,9 @@ struct FillRingView: View {
                     )
                 }
                 context.stroke(
-                    fill_path,
-                    with: .color(fill_color),
-                    style: StrokeStyle(lineWidth: line_width, lineCap: .round)
+                    fillPath,
+                    with: .color(fillColor),
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
             }
         }
@@ -58,16 +59,25 @@ struct FillRingView: View {
 // MARK: - Preview
 
 #Preview("Empty") {
-    FillRingView(progress: 0.0, line_width: 20)
-        .frame(width: 250, height: 250)
+    ZStack {
+        Color(red: 0.06, green: 0.06, blue: 0.12)
+        FillRingView(progress: 0.0, lineWidth: 12)
+            .frame(width: 280, height: 350)
+    }
 }
 
 #Preview("Half") {
-    FillRingView(progress: 0.5, line_width: 20)
-        .frame(width: 250, height: 250)
+    ZStack {
+        Color(red: 0.06, green: 0.06, blue: 0.12)
+        FillRingView(progress: 0.5, lineWidth: 12)
+            .frame(width: 280, height: 350)
+    }
 }
 
 #Preview("Full") {
-    FillRingView(progress: 1.0, line_width: 20)
-        .frame(width: 250, height: 250)
+    ZStack {
+        Color(red: 0.06, green: 0.06, blue: 0.12)
+        FillRingView(progress: 1.0, lineWidth: 12)
+            .frame(width: 280, height: 350)
+    }
 }

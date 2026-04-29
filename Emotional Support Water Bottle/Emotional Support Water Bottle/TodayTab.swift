@@ -2,8 +2,9 @@
 //  TodayTab.swift
 //  Emotional Support Water Bottle
 //
-//  Main hydration tracking screen. Shows fill ring with progress,
-//  water simulation, and drink logging button.
+//  Main hydration tracking screen.
+//  Hero: water bottle with metaball water inside, surrounded by a progress ring.
+//  Stats below the bottle. Drink button at the bottom.
 //
 
 import SwiftUI
@@ -22,56 +23,66 @@ struct TodayTab: View {
         NavigationStack {
             GeometryReader { geo in
                 let size = geo.size
+                let circleSize = min(size.width * 0.55, size.height * 0.4)
                 
                 VStack(spacing: 0) {
                     Spacer()
                     
-                    // Fill ring with stats overlay
+                    // MARK: - Hero: Ring + Water Circle
                     ZStack {
+                        // Progress ring surrounds the water circle
                         FillRingView(
                             progress: hydrationManager.progress,
-                            line_width: size.width * 0.06
+                            lineWidth: 10
                         )
-                        .frame(width: size.width * 0.7, height: size.width * 0.7)
+                        .frame(width: circleSize + 32, height: circleSize + 32)
                         
-                        // Center text
-                        VStack(spacing: 4) {
-                            if let prefs = prefs {
-                                Text(prefs.formatAmount(hydrationManager.todayIntakeML))
-                                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                                    .foregroundStyle(.white)
-                                
-                                Text("of \(prefs.formatAmount(prefs.dailyGoalML))")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.white.opacity(0.7))
-                                
-                                let pct = Int(hydrationManager.progress * 100)
-                                Text("\(pct)%")
-                                    .font(.caption)
-                                    .foregroundStyle(.cyan)
-                                    .padding(.top, 2)
-                            }
+                        // Metaball water inside a circle, slightly inset from ring
+                        // WaterSimView shows remaining water — starts full, empties as you drink
+        WaterSimView(progress: 1.0 - hydrationManager.progress)
+                            .frame(width: circleSize, height: circleSize)
+                    }
+                    
+                    // MARK: - Stats
+                    VStack(spacing: 6) {
+                        if let prefs = prefs {
+                            Text(prefs.formatAmount(hydrationManager.todayIntakeML))
+                                .font(.system(size: 40, weight: .bold, design: .rounded))
+                                .foregroundStyle(.white)
+                            
+                            Text("of \(prefs.formatAmount(prefs.dailyGoalML))")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.6))
+                        }
+                        
+                        let pct = Int(hydrationManager.progress * 100)
+                        Text("\(pct)%")
+                            .font(.title3.monospacedDigit().bold())
+                            .foregroundStyle(.cyan)
+                            .padding(.top, 2)
+                        
+                        if hydrationManager.goalMet {
+                            Text("Goal met! Great job! 💧")
+                                .font(.subheadline.bold())
+                                .foregroundStyle(.cyan)
+                                .transition(.opacity)
+                        } else {
+                            Text("\(hydrationManager.sipsRemaining) sips to go")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.5))
+                                .transition(.opacity)
                         }
                     }
-                    
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    // Water simulation
-                    if let prefs = prefs {
-                        let simProgress = min(1.0, 1.0 - hydrationManager.progress)
-                        WaterSimView(progress: max(0.05, simProgress))
-                            .frame(width: size.width * 0.75, height: size.height * 0.3)
-                            .padding(.horizontal)
-                    }
+                    .padding(.top, 20)
+                    .animation(.easeInOut(duration: 0.3), value: hydrationManager.goalMet)
                     
                     Spacer()
                     
-                    // Drink button
+                    // MARK: - Drink Button
                     Button {
                         hydrationManager.logDrink()
                     } label: {
-                        HStack {
+                        HStack(spacing: 8) {
                             Image(systemName: "drop.fill")
                             Text("Log a Sip")
                         }
@@ -86,20 +97,8 @@ struct TodayTab: View {
                     }
                     .padding(.horizontal, 32)
                     
-                    if hydrationManager.goalMet {
-                        Text("Goal met! Great job! 💧")
-                            .font(.subheadline)
-                            .foregroundStyle(.cyan)
-                            .padding(.top, 8)
-                    } else if let prefs = prefs {
-                        Text("\(hydrationManager.sipsRemaining) sips to go")
-                            .font(.subheadline)
-                            .foregroundStyle(.white.opacity(0.6))
-                            .padding(.top, 8)
-                    }
-                    
                     Spacer()
-                        .frame(height: 20)
+                        .frame(height: 24)
                 }
                 .frame(width: size.width, height: size.height)
             }

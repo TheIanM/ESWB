@@ -13,13 +13,19 @@ struct RootView: View {
     @Environment(HydrationManager.self) private var hydrationManager
     @Query private var preferences: [UserPreferences]
     
-    private var currentPrefs: UserPreferences? {
-        preferences.first
+    /// Whether onboarding has been completed — checks ALL prefs, not just .first
+    private var isOnboarded: Bool {
+        preferences.contains { $0.hasCompletedOnboarding }
+    }
+    
+    private var activePrefs: UserPreferences? {
+        preferences.first { $0.hasCompletedOnboarding }
     }
     
     var body: some View {
+        let _ = print("[RootView] prefs count: \(preferences.count), isOnboarded: \(isOnboarded), flags: \(preferences.map(\.hasCompletedOnboarding))")
         Group {
-            if let prefs = currentPrefs, prefs.hasCompletedOnboarding {
+            if isOnboarded, let prefs = activePrefs {
                 MainTabView()
                     .onAppear {
                         hydrationManager.configure(preferences: prefs, context: modelContext)
@@ -28,7 +34,6 @@ struct RootView: View {
                 OnboardingView()
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: currentPrefs?.hasCompletedOnboarding)
     }
 }
 

@@ -561,23 +561,40 @@ struct OnboardingView: View {
     }
     
     private func saveAndFinish() {
-        let prefs = UserPreferences(
-            unitPreference: unitPreference,
-            activityLevel: activityLevel,
-            bottleSizeML: bottleSizeML,
-            dailyGoalML: dailyGoalML,
-            reminderPersonality: "excited-dog",
-            reminderScheduleType: scheduleType,
-            reminderIntervalHours: 1.0,
-            reminderStartHour: reminderStartHour,
-            reminderEndHour: reminderEndHour,
-            healthKitEnabled: healthKitEnabled,
-            hasCompletedOnboarding: true,
-            preferredLoggingMethod: loggingMethod,
-            sipsPerBottle: 6
-        )
+        // Always fetch all existing prefs — there should only ever be one
+        let existing = (try? modelContext.fetch(FetchDescriptor<UserPreferences>())) ?? []
         
-        modelContext.insert(prefs)
+        // Use the first existing, or create new
+        let prefs: UserPreferences
+        if let first = existing.first {
+            prefs = first
+            // Delete any duplicates from previous buggy runs
+            for extra in existing.dropFirst() {
+                modelContext.delete(extra)
+            }
+        } else {
+            prefs = UserPreferences()
+            modelContext.insert(prefs)
+        }
+        
+        // Apply all values
+        prefs.unitPreference = unitPreference
+        prefs.activityLevel = activityLevel
+        prefs.bottleSizeML = bottleSizeML
+        prefs.dailyGoalML = dailyGoalML
+        prefs.reminderPersonality = "excited-dog"
+        prefs.reminderScheduleType = scheduleType
+        prefs.reminderIntervalHours = 1.0
+        prefs.reminderStartHour = reminderStartHour
+        prefs.reminderEndHour = reminderEndHour
+        prefs.healthKitEnabled = healthKitEnabled
+        prefs.hasCompletedOnboarding = true
+        prefs.preferredLoggingMethod = loggingMethod
+        prefs.sipsPerBottle = 6
+        
+        // Force persist
+        try? modelContext.save()
+        
         hydrationManager.configure(preferences: prefs, context: modelContext)
     }
 }
