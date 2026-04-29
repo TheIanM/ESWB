@@ -1,0 +1,121 @@
+{
+  "identifier" : "ESWBStoreKitConfig",
+  "nonConsumables" : [
+    {
+      "localizations" : [
+        {
+          "description" : "Buy the dev a coffee to say thanks",
+          "displayName" : "Buy me a coffee",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.coffee",
+      "referenceName" : "Tip - Coffee",
+      "storeProductID" : "tip_coffee"
+    },
+    {
+      "localizations" : [
+        {
+          "description" : "Buy the dev a boba tea",
+          "displayName" : "Buy me a boba",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.boba",
+      "referenceName" : "Tip - Boba",
+      "storeProductID" : "tip_boba"
+    },
+    {
+      "localizations" : [
+        {
+          "description" : "Buy the dev lunch",
+          "displayName" : "Buy me lunch",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.lunch",
+      "referenceName" : "Tip - Lunch",
+      "storeProductID" : "tip_lunch"
+    },
+    {
+      "localizations" : [
+        {
+          "description" : "Buy the dev dinner",
+          "displayName" : "Buy me dinner",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.dinner",
+      "referenceName" : "Tip - Dinner",
+      "storeProductID" : "tip_dinner"
+    },
+    {
+      "localizations" : [
+        {
+          "description" : "Buy the dev a fancy dinner",
+          "displayName" : "Fancy dinner",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.fancyDinner",
+      "referenceName" : "Tip - Fancy Dinner",
+      "storeProductID" : "tip_fancy_dinner"
+    },
+    {
+      "localizations" : [
+        {
+          "description" : "You're incredibly generous!",
+          "displayName" : "You're a legend",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.eswb.tip.generous",
+      "referenceName" : "Tip - Generous",
+      "storeProductID" : "tip_generous"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6738985632",
+    "_developerTeamID" : "YOUR_TEAM_ID",
+    "failTransactionsEnabled" : false,
+    "locale" : "en_US",
+    "storefront" : "USA",
+    "storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions"
+      }
+    ]
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

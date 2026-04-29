@@ -70,6 +70,10 @@ struct WaterSimView: View {
             .drawingGroup()
         }
         .clipShape(Circle())
+        // Canvas is invisible to VoiceOver — add semantic water level description
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Water bottle simulation")
+        .accessibilityValue(Text("Water level at \(Int(min(progress, 1.0) * 100)) percent"))
         // Drag to slosh (only activates for real drags, taps pass through)
         .simultaneousGesture(
             reduceMotion ? nil :

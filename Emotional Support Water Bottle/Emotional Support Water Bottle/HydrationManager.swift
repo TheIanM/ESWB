@@ -66,6 +66,11 @@ final class HydrationManager {
         
         todayIntakeML += amount
         
+        // Write to HealthKit if enabled
+        if prefs.healthKitEnabled {
+            HealthKitManager.shared.logWaterIntake(amountML: amount)
+        }
+        
         // Reschedule reminders (fewer remaining now, or cancel if goal met)
         rescheduleReminders()
     }

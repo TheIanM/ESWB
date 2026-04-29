@@ -143,7 +143,7 @@ struct StatsTab: View {
             if items.isEmpty {
                 Text("No drinks logged yet today")
                     .font(.system(size: 13))
-                    .foregroundStyle(Color.white.opacity(0.5))
+                    .foregroundStyle(Color.white.opacity(0.7))
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 20)
             } else {
@@ -162,7 +162,7 @@ struct StatsTab: View {
                     .foregroundStyle(.white)
                 Text(subtitle)
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(Color.white.opacity(0.5))
+                    .foregroundStyle(Color.white.opacity(0.7))
             }
             content()
         }

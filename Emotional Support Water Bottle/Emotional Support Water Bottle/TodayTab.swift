@@ -52,7 +52,7 @@ struct TodayTab: View {
                             
                             Text("of \(prefs.formatAmount(prefs.dailyGoalML))")
                                 .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.6))
+                                .foregroundStyle(.white.opacity(0.7))
                         }
                         
                         let pct = Int(hydrationManager.progress * 100)
@@ -69,10 +69,24 @@ struct TodayTab: View {
                         } else {
                             Text("\(hydrationManager.sipsRemaining) sips to go")
                                 .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.5))
+                                .foregroundStyle(.white.opacity(0.7))
                                 .transition(.opacity)
                         }
                     }
+                    // Combine all stat text into a single VoiceOver element
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel({
+                        if let prefs = prefs {
+                            let intake = prefs.formatAmount(hydrationManager.todayIntakeML)
+                            let goal = prefs.formatAmount(prefs.dailyGoalML)
+                            if hydrationManager.goalMet {
+                                return "Goal met! Logged \(intake) of \(goal) daily goal"
+                            } else {
+                                return "Logged \(intake) of \(goal) daily goal. \(hydrationManager.sipsRemaining) sips remaining"
+                            }
+                        }
+                        return "Hydration stats"
+                    }())
                     .padding(.top, 20)
                     .animation(.easeInOut(duration: 0.3), value: hydrationManager.goalMet)
                     
@@ -95,6 +109,12 @@ struct TodayTab: View {
                                 .fill(Color.cyan)
                         )
                     }
+                    .accessibilityHint({
+                        if hydrationManager.goalMet {
+                            return "You've already met your daily goal"
+                        }
+                        return "Logs one sip, \(hydrationManager.sipsRemaining) sips remaining"
+                    }())
                     .padding(.horizontal, 32)
                     
                     Spacer()

@@ -53,6 +53,10 @@ struct FillRingView: View {
                 )
             }
         }
+        // Canvas is invisible to VoiceOver, so we add semantic info here
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Hydration progress ring")
+        .accessibilityValue(Text("\(Int(progress * 100)) percent complete"))
     }
 }
 

@@ -28,6 +28,20 @@ struct SettingsTab: View {
                     bottleSection(prefs)
                     goalSection(prefs)
                     personalitySection(prefs)
+                    healthKitSection(prefs)
+                    
+                    // Tip Jar
+                    Section {
+                        NavigationLink {
+                            TipJarView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "heart.fill")
+                                    .foregroundStyle(.pink)
+                                Text("Support the Dev")
+                            }
+                        }
+                    }
                     
                     Section {
                         Button("Redo Onboarding", role: .destructive) {
@@ -154,6 +168,49 @@ struct SettingsTab: View {
                     Text("5 sec")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+    
+    // MARK: - HealthKit
+    
+    private func healthKitSection(_ prefs: UserPreferences) -> some View {
+        Section("Apple Health") {
+            Toggle("Sync with Health app", isOn: bind(prefs, \.healthKitEnabled))
+            
+            if prefs.healthKitEnabled {
+                HStack {
+                    Label("Mood Data", systemImage: "brain.head.profile")
+                    Spacer()
+                    if let mood = HealthKitManager.shared.currentMood {
+                        Text(mood.capitalized)
+                            .font(.caption)
+                            .foregroundStyle(.cyan)
+                    } else {
+                        Text("No data")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                
+                Button {
+                    Task {
+                        await HealthKitManager.shared.fetchLatestMood()
+                    }
+                } label: {
+                    Label("Refresh Mood", systemImage: "arrow.clockwise")
+                }
+            }
+            
+            Text("Writes water intake to Apple Health. Reads mood data for emotionally supportive reminders.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .onChange(of: prefs.healthKitEnabled) { _, newValue in
+            if newValue {
+                Task {
+                    await HealthKitManager.shared.requestAuthorization()
                 }
             }
         }

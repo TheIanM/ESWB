@@ -27,14 +27,31 @@
 - [x] 5.8 Build + smoke test notification flow end-to-end
   - verify: BUILD SUCCEEDED ✅
 
-## Phase 3: HealthKit Integration (NOT STARTED)
-- [ ] Request HealthKit permissions (read mood, write dietary water)
-- [ ] Write hydration data to HK on each log
-- [ ] Read mood data for personality-aware prompts
+## Phase 3: HealthKit Integration ✅ DONE
+- [x] 3.1 Create HealthKitManager.swift — request read/write permissions
+  - verify: compiles ✅
+- [x] 3.2 Write hydration data to HK on each drink log
+  - verify: HydrationManager.logDrink calls HealthKitManager.logWaterIntake ✅
+- [x] 3.3 Read mood data from HK for personality-aware prompts
+  - verify: fetchLatestMood uses HKStateOfMind + HKSampleQueryDescriptor ✅
+- [x] 3.4 Wire HealthKit toggle in Settings to enable/disable sync
+  - verify: Settings healthKitSection with toggle + refresh mood button ✅
+- [x] 3.5 Build + smoke test
+  - verify: BUILD SUCCEEDED ✅
+- [x] 3.6 NOTE: You need to add HealthKit capability in Xcode (Signing & Capabilities)
+  and add NSHealthShareUsageDescription / NSHealthUpdateUsageDescription to Info.plist
 
-## Phase 6: IAP Tip Jar (NOT STARTED)
-- [ ] Set up multiple non-consumable IAP products
-- [ ] Tip jar UI
+## Phase 6: IAP Tip Jar ✅ DONE
+- [x] 6.1 Create StoreKit product configuration (.storekit file) with 6 tip tiers
+  - verify: ESWBStoreKitConfig.storekit with coffee/boba/lunch/dinner/fancy/legend ✅
+- [x] 6.2 Create StoreManager.swift — load products, handle purchases, verify transactions
+  - verify: StoreKit 2 async, Transaction.updates listener, verification ✅
+- [x] 6.3 Create TipJarView.swift — grid of tip options with witty labels
+  - verify: 2-column grid, emoji labels, purchased state, thank you alert ✅
+- [x] 6.4 Wire TipJarView into Settings tab
+  - verify: NavigationLink from Settings → Tip Jar ✅
+- [x] 6.5 Build + smoke test
+  - verify: BUILD SUCCEEDED ✅
 
 ## Phase 7: Polish & Watch (NOT STARTED)
 - [ ] Accessibility audit

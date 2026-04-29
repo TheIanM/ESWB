@@ -44,8 +44,15 @@ struct ReminderScheduler {
         )
         
         // Schedule each one with a personality message
+        let hkManager = HealthKitManager.shared
         for (index, date) in times.enumerated() {
-            let message = personalityEngine.randomMessage(personalityID: personalityID)
+            // Use mood-aware message for Emotional Support personality
+            let message: String
+            if personalityID == "emotional-support", let mood = hkManager.currentMood {
+                message = personalityEngine.moodMessage(mood: mood)
+            } else {
+                message = personalityEngine.randomMessage(personalityID: personalityID)
+            }
             let id = "hydration-reminder-\(index)"
             
             notificationManager.scheduleNotification(

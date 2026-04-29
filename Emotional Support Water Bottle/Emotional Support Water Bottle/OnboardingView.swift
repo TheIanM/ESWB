@@ -77,7 +77,7 @@ struct OnboardingView: View {
                         Button("Back") {
                             withAnimation { currentStep -= 1 }
                         }
-                        .foregroundStyle(.white.opacity(0.6))
+                        .foregroundStyle(.white.opacity(0.7))
                     }
                     
                     Spacer()
@@ -133,7 +133,7 @@ struct OnboardingView: View {
             
             Text("You can change this later in Settings.")
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.6))
+                .foregroundStyle(.white.opacity(0.7))
             
             VStack(spacing: 12) {
                 ForEach(UnitPreference.allCases, id: \.self) { unit in
@@ -155,6 +155,8 @@ struct OnboardingView: View {
                                 .fill(unitPreference == unit ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                         )
                     }
+                    // Accessibility: announce selected state
+                    .accessibilityAddTraits(unitPreference == unit ? .isSelected : [])
                 }
             }
             .padding(.horizontal, 24)
@@ -188,8 +190,11 @@ struct OnboardingView: View {
                     value: $bottleSizeML,
                     in: 300...3000,
                     step: unitPreference == .oz ? 30 : 50
-                )
+                ) {
+                    Text("Bottle size")
+                }
                 .tint(.cyan)
+                .accessibilityValue(Text(formatBottleSize(bottleSizeML)))
                 .padding(.horizontal, 24)
                 
                 // Common sizes as quick picks
@@ -238,7 +243,7 @@ struct OnboardingView: View {
             
             Text("This helps us set your daily goal.")
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.6))
+                .foregroundStyle(.white.opacity(0.7))
             
             VStack(spacing: 12) {
                 ForEach(ActivityLevel.allCases, id: \.self) { level in
@@ -253,7 +258,7 @@ struct OnboardingView: View {
                                     .foregroundStyle(.white)
                                 Text(level.description)
                                     .font(.caption)
-                                    .foregroundStyle(.white.opacity(0.6))
+                                    .foregroundStyle(.white.opacity(0.7))
                                 Text("~\(formatBottleSize(level.recommendedML))/day")
                                     .font(.caption)
                                     .foregroundStyle(.cyan)
@@ -270,6 +275,8 @@ struct OnboardingView: View {
                                 .fill(activityLevel == level ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                         )
                     }
+                    // Accessibility: announce selected state
+                    .accessibilityAddTraits(activityLevel == level ? .isSelected : [])
                 }
             }
             .padding(.horizontal, 24)
@@ -307,7 +314,7 @@ struct OnboardingView: View {
                 
                 Text("\(totalSips) sips throughout the day")
                     .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(.white.opacity(0.7))
             }
             
             // Adjustable goal
@@ -318,6 +325,7 @@ struct OnboardingView: View {
                     step: 100
                 )
                 .tint(.cyan)
+                .accessibilityValue(Text(formatBottleSize(dailyGoalML)))
                 .padding(.horizontal, 24)
                 
                 HStack {
@@ -326,13 +334,13 @@ struct OnboardingView: View {
                     Text(formatBottleSize(5000))
                 }
                 .font(.caption)
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(.white.opacity(0.7))
                 .padding(.horizontal, 24)
             }
             
             Text("Based on Mayo Clinic guidelines: 2.7–3.7L/day")
                 .font(.caption2)
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(.white.opacity(0.7))
             
             Spacer()
         }
@@ -362,7 +370,7 @@ struct OnboardingView: View {
                             .foregroundStyle(.white)
                         Text("Write your water intake to Apple Health so other apps can see it.")
                             .font(.caption)
-                            .foregroundStyle(.white.opacity(0.6))
+                            .foregroundStyle(.white.opacity(0.7))
                     }
                 }
                 
@@ -375,7 +383,7 @@ struct OnboardingView: View {
                             .foregroundStyle(.white)
                         Text("Read your mood logs to send you emotionally supportive reminders.")
                             .font(.caption)
-                            .foregroundStyle(.white.opacity(0.6))
+                            .foregroundStyle(.white.opacity(0.7))
                     }
                 }
             }
@@ -391,7 +399,7 @@ struct OnboardingView: View {
             
             Text("You'll be prompted to grant permissions on the next screen.")
                 .font(.caption)
-                .foregroundStyle(.white.opacity(0.5))
+                .foregroundStyle(.white.opacity(0.7))
                 .padding(.horizontal, 24)
             
             Spacer()
@@ -427,7 +435,7 @@ struct OnboardingView: View {
                             .foregroundStyle(.white)
                             Text("Simple button press to log each sip. Always accessible.")
                                 .font(.caption)
-                                .foregroundStyle(.white.opacity(0.6))
+                                .foregroundStyle(.white.opacity(0.7))
                         }
                         Spacer()
                         if loggingMethod == .button {
@@ -441,6 +449,7 @@ struct OnboardingView: View {
                             .fill(loggingMethod == .button ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                     )
                 }
+                .accessibilityAddTraits(loggingMethod == .button ? .isSelected : [])
                 
                 // Tilt option
                 Button {
@@ -456,7 +465,7 @@ struct OnboardingView: View {
                             .foregroundStyle(.white)
                             Text("Tilt your phone like a bottle. Fun but optional — button is always available.")
                                 .font(.caption)
-                                .foregroundStyle(.white.opacity(0.6))
+                                .foregroundStyle(.white.opacity(0.7))
                         }
                         Spacer()
                         if loggingMethod == .tilt {
@@ -470,6 +479,7 @@ struct OnboardingView: View {
                             .fill(loggingMethod == .tilt ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                     )
                 }
+                .accessibilityAddTraits(loggingMethod == .tilt ? .isSelected : [])
             }
             .padding(.horizontal, 24)
             
@@ -493,7 +503,7 @@ struct OnboardingView: View {
             
             Text("How should your reminders talk to you?")
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.6))
+                .foregroundStyle(.white.opacity(0.7))
             
             ScrollView {
                 VStack(spacing: 12) {
@@ -512,7 +522,7 @@ struct OnboardingView: View {
                                         .foregroundStyle(.white)
                                     Text(personality.description)
                                         .font(.caption)
-                                        .foregroundStyle(.white.opacity(0.6))
+                                        .foregroundStyle(.white.opacity(0.7))
                                         .lineLimit(1)
                                 }
                                 Spacer()
@@ -527,6 +537,7 @@ struct OnboardingView: View {
                                     .fill(selectedPersonality == personality.id ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                             )
                         }
+                        .accessibilityAddTraits(selectedPersonality == personality.id ? .isSelected : [])
                     }
                 }
                 .padding(.horizontal, 24)
@@ -562,7 +573,7 @@ struct OnboardingView: View {
                                     .foregroundStyle(.white)
                                 Text(type.description)
                                     .font(.caption)
-                                    .foregroundStyle(.white.opacity(0.6))
+                                    .foregroundStyle(.white.opacity(0.7))
                             }
                             Spacer()
                             if scheduleType == type {
@@ -576,6 +587,7 @@ struct OnboardingView: View {
                                 .fill(scheduleType == type ? Color.cyan.opacity(0.2) : Color.white.opacity(0.08))
                         )
                     }
+                    .accessibilityAddTraits(scheduleType == type ? .isSelected : [])
                 }
             }
             .padding(.horizontal, 24)
@@ -666,6 +678,11 @@ struct OnboardingView: View {
             let granted = await NotificationManager.shared.requestPermission()
             if granted {
                 ReminderScheduler.scheduleFromPreferences(prefs, sipsRemaining: hydrationManager.sipsRemaining)
+            }
+            
+            // Request HealthKit permission if enabled
+            if healthKitEnabled {
+                await HealthKitManager.shared.requestAuthorization()
             }
         }
     }

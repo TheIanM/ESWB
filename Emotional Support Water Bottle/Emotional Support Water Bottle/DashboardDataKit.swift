@@ -37,7 +37,7 @@ private let kBg   = Color(hex: "0D1117")
 private let kCard = Color(hex: "161B22")
 private let kSurf = Color(hex: "21262D")
 private let kBord = Color.white.opacity(0.06)
-private let kSec  = Color.white.opacity(0.5)
+private let kSec  = Color.white.opacity(0.7)
 
 // Accent color — cyan water
 private let kAccent = Color(hex: "00B4D8")
@@ -97,6 +97,9 @@ struct StatCard: View {
         .padding(16)
         .background(RoundedRectangle(cornerRadius: 16).fill(kCard)
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(kBord)))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
+        .accessibilityHint(trend != nil ? String(format: "Trend: %+.1f%%", trend!) : "")
     }
 }
 
@@ -222,6 +225,12 @@ struct BarChartMini: View {
         }
         .frame(height: height + 36)
         .onAppear { appeared = true }
+        // VoiceOver: summarize the chart data as a single element
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel({
+            let values = data.enumerated().map { "\($1.label): \(Int($1.value))" }
+            return "7-day bar chart. " + values.joined(separator: ", ")
+        }())
     }
 }
 
@@ -327,6 +336,8 @@ struct MetricComparison: View {
             .frame(height: 10)
             .clipShape(Capsule())
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(leftLabel): \(Int(leftValue)) \(unit). \(rightLabel): \(Int(rightValue)) \(unit)")
     }
 }
 
@@ -391,6 +402,9 @@ struct VerticalTimeline: View {
                     }
                     .padding(.bottom, i < items.count - 1 ? 20 : 0)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(item.title) at \(item.time)")
+                .accessibilityValue(item.subtitle)
             }
         }
     }
