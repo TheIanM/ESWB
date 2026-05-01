@@ -20,7 +20,10 @@ struct Emotional_Support_Water_BottleApp: App {
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // In-memory container can't fail (no filesystem I/O), but ModelContainer API
+            // always declares throws. The app can't function without a container, so
+            // force-try is appropriate here.
+            return try! ModelContainer(for: schema, configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)])
         }
     }()
     

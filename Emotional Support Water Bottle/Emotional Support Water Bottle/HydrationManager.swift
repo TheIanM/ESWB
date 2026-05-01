@@ -92,7 +92,9 @@ final class HydrationManager {
             let entries = try ctx.fetch(descriptor)
             todayIntakeML = entries.reduce(0) { $0 + $1.amountML }
         } catch {
+            #if DEBUG
             print("Failed to fetch today's entries: \(error)")
+            #endif
         }
     }
     

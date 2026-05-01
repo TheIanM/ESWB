@@ -21,10 +21,14 @@ class NotificationManager {
         do {
             let granted = try await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .sound, .badge])
+            #if DEBUG
             print("[NotificationManager] Permission granted: \(granted)")
+            #endif
             return granted
         } catch {
+            #if DEBUG
             print("[NotificationManager] Permission error: \(error)")
+            #endif
             return false
         }
     }
@@ -67,7 +71,9 @@ class NotificationManager {
         
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
+                #if DEBUG
                 print("[NotificationManager] Failed to schedule \(id): \(error)")
+                #endif
             }
         }
     }
@@ -96,9 +102,13 @@ class NotificationManager {
         
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
+                #if DEBUG
                 print("[NotificationManager] Test notification failed: \(error)")
+                #endif
             } else {
+                #if DEBUG
                 print("[NotificationManager] Test notification scheduled (5s)")
+                #endif
             }
         }
     }
@@ -108,7 +118,9 @@ class NotificationManager {
     /// Remove all pending hydration reminders
     func cancelAllReminders() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        #if DEBUG
         print("[NotificationManager] All reminders canceled")
+        #endif
     }
     
     /// Remove reminders with specific IDs

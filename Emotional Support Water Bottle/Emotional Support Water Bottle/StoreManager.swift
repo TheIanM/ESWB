@@ -57,9 +57,13 @@ final class StoreManager {
         do {
             let storeProducts = try await Product.products(for: Self.productIDs)
             products = storeProducts.sorted { $0.price < $1.price }
+            #if DEBUG
             print("[StoreManager] Loaded \(products.count) products")
+            #endif
         } catch {
+            #if DEBUG
             print("[StoreManager] Failed to load products: \(error)")
+            #endif
         }
         
         // Check existing purchases
@@ -84,23 +88,31 @@ final class StoreManager {
                 // Finish the transaction
                 await transaction.finish()
                 
+                #if DEBUG
                 print("[StoreManager] Purchased: \(transaction.productID)")
+                #endif
                 return transaction
                 
             case .userCancelled:
+                #if DEBUG
                 print("[StoreManager] Purchase cancelled")
+                #endif
                 return nil
                 
             case .pending:
                 // Transaction requires approval (e.g. Ask to Buy)
+                #if DEBUG
                 print("[StoreManager] Purchase pending")
+                #endif
                 return nil
                 
             @unknown default:
                 return nil
             }
         } catch {
+            #if DEBUG
             print("[StoreManager] Purchase failed: \(error)")
+            #endif
             return nil
         }
     }
@@ -117,7 +129,9 @@ final class StoreManager {
                     self.purchasedProductIDs.insert(transaction.productID)
                     await transaction.finish()
                 } catch {
+                    #if DEBUG
                     print("[StoreManager] Transaction listener error: \(error)")
+                    #endif
                 }
             }
         }
@@ -140,7 +154,9 @@ final class StoreManager {
     /// Restore previous purchases
     func restorePurchases() async {
         await updatePurchasedProducts()
+        #if DEBUG
         print("[StoreManager] Restored purchases: \(purchasedProductIDs)")
+        #endif
     }
     
     /// Check all previous transactions

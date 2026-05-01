@@ -23,7 +23,11 @@ struct RootView: View {
     }
     
     var body: some View {
-        let _ = print("[RootView] prefs count: \(preferences.count), isOnboarded: \(isOnboarded), flags: \(preferences.map(\.hasCompletedOnboarding))")
+        let _ = {
+            #if DEBUG
+            print("[RootView] prefs count: \(preferences.count), isOnboarded: \(isOnboarded), flags: \(preferences.map(\.hasCompletedOnboarding))")
+            #endif
+        }()
         Group {
             if isOnboarded, let prefs = activePrefs {
                 MainTabView()

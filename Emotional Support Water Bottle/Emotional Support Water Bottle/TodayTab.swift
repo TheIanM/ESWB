@@ -15,8 +15,16 @@ struct TodayTab: View {
     @Environment(HydrationManager.self) private var hydrationManager
     @Query private var preferences: [UserPreferences]
     
+    @State private var tiltDetector = TiltDetector()
+    @State private var showTiltLoggedFeedback = false
+    
     private var prefs: UserPreferences? {
         preferences.first
+    }
+    
+    /// Whether tilt-to-log should be active
+    private var isTiltLoggingEnabled: Bool {
+        prefs?.preferredLoggingMethod == .tilt
     }
     
     var body: some View {
@@ -92,6 +100,16 @@ struct TodayTab: View {
                     
                     Spacer()
                     
+                    // MARK: - Tilt indicator (when tilt mode is active)
+                    if isTiltLoggingEnabled {
+                        HStack(spacing: 6) {
+                            Image(systemName: "iphone.and.arrow.forward")
+                            Text("Tilt your phone to log a sip")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.cyan.opacity(0.7))
+                    }
+                    
                     // MARK: - Drink Button
                     Button {
                         hydrationManager.logDrink()
@@ -123,11 +141,69 @@ struct TodayTab: View {
                 .frame(width: size.width, height: size.height)
             }
             .background(Color(red: 0.06, green: 0.06, blue: 0.12))
+            .overlay {
+                // Visual feedback when a tilt sip is logged
+                if showTiltLoggedFeedback {
+                    VStack {
+                        Spacer()
+                        HStack(spacing: 6) {
+                            Image(systemName: "drop.fill")
+                            Text("Tilt sip logged!")
+                        }
+                        .font(.subheadline.bold())
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(
+                            Capsule().fill(Color.cyan)
+                        )
+                        Spacer()
+                        // Position near bottom, above the drink button area
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.bottom, 120)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: showTiltLoggedFeedback)
             .navigationTitle("Today")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(Color(red: 0.06, green: 0.06, blue: 0.12), for: .navigationBar)
+            .onAppear {
+                configureTiltDetector()
+            }
+            .onChange(of: isTiltLoggingEnabled) {
+                if isTiltLoggingEnabled {
+                    configureTiltDetector()
+                    tiltDetector.start()
+                } else {
+                    tiltDetector.stop()
+                }
+            }
+            .onDisappear {
+                tiltDetector.stop()
+            }
+        }
+    }
+    
+    // MARK: - Tilt Detection
+    
+    private func configureTiltDetector() {
+        tiltDetector.onTiltDetected = {
+            guard !hydrationManager.goalMet else { return }
+            hydrationManager.logDrink(source: .tilt)
+            
+            // Show visual feedback
+            showTiltLoggedFeedback = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showTiltLoggedFeedback = false
+            }
+        }
+        
+        if isTiltLoggingEnabled {
+            tiltDetector.start()
         }
     }
 }

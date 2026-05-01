@@ -463,7 +463,7 @@ struct OnboardingView: View {
                                     .font(.headline)
                             }
                             .foregroundStyle(.white)
-                            Text("Tilt your phone like a bottle. Fun but optional — button is always available.")
+                            Text("Tilt your phone like a bottle to log. Button still available as backup.")
                                 .font(.caption)
                                 .foregroundStyle(.white.opacity(0.7))
                         }
@@ -480,6 +480,7 @@ struct OnboardingView: View {
                     )
                 }
                 .accessibilityAddTraits(loggingMethod == .tilt ? .isSelected : [])
+                
             }
             .padding(.horizontal, 24)
             

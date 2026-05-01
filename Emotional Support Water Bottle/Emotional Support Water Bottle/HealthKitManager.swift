@@ -49,7 +49,9 @@ final class HealthKitManager {
     @discardableResult
     func requestAuthorization() async -> Bool {
         guard isAvailable else {
+            #if DEBUG
             print("[HealthKitManager] Not available on this device")
+            #endif
             return false
         }
         
@@ -59,12 +61,16 @@ final class HealthKitManager {
         do {
             try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
             isAuthorized = true
+            #if DEBUG
             print("[HealthKitManager] Authorization granted")
+            #endif
             
             await fetchLatestMood()
             return true
         } catch {
+            #if DEBUG
             print("[HealthKitManager] Authorization failed: \(error)")
+            #endif
             isAuthorized = false
             return false
         }
@@ -87,9 +93,13 @@ final class HealthKitManager {
         
         healthStore.save(sample) { success, error in
             if success {
+                #if DEBUG
                 print("[HealthKitManager] Logged \(amountML)mL water to HealthKit")
+                #endif
             } else if let error = error {
+                #if DEBUG
                 print("[HealthKitManager] Failed to log water: \(error)")
+                #endif
             }
         }
     }
@@ -110,10 +120,14 @@ final class HealthKitManager {
             let results = try await descriptor.result(for: healthStore)
             if let latest = results.first {
                 currentMood = moodClassificationToString(latest.valenceClassification)
+                #if DEBUG
                 print("[HealthKitManager] Latest mood: \(currentMood ?? "unknown")")
+                #endif
             }
         } catch {
+            #if DEBUG
             print("[HealthKitManager] Failed to fetch mood: \(error)")
+            #endif
         }
     }
     

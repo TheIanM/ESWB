@@ -48,7 +48,9 @@ class PersonalityEngine {
             withExtension: "json",
             subdirectory: "Personalities"
         ) else {
+            #if DEBUG
             print("[PersonalityEngine] Could not find JSON for: \(personalityID)")
+            #endif
             return nil
         }
         
@@ -58,7 +60,9 @@ class PersonalityEngine {
             loadedPersonalities[personalityID] = personality
             return personality
         } catch {
+            #if DEBUG
             print("[PersonalityEngine] Failed to decode \(personalityID): \(error)")
+            #endif
             return nil
         }
     }

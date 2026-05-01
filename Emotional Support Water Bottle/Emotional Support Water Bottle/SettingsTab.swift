@@ -26,6 +26,7 @@ struct SettingsTab: View {
                 if let prefs = prefs {
                     unitsSection(prefs)
                     bottleSection(prefs)
+                    loggingSection(prefs)
                     goalSection(prefs)
                     personalitySection(prefs)
                     healthKitSection(prefs)
@@ -86,6 +87,24 @@ struct SettingsTab: View {
             }
             
             Stepper("Sips per bottle: \(prefs.sipsPerBottle)", value: bind(prefs, \.sipsPerBottle), in: 2...12)
+        }
+    }
+    
+    // MARK: - Logging Method
+    
+    private func loggingSection(_ prefs: UserPreferences) -> some View {
+        Section("Logging Method") {
+            Picker("Log drinks by", selection: bind(prefs, \.preferredLoggingMethod)) {
+                Text("Button Tap").tag(LoggingMethod.button)
+                Text("Tilt Phone").tag(LoggingMethod.tilt)
+            }
+            .pickerStyle(.segmented)
+            
+            if prefs.preferredLoggingMethod == .tilt {
+                Text("Tilt your phone like you're drinking from a bottle to log a sip. The button still works as backup.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
     

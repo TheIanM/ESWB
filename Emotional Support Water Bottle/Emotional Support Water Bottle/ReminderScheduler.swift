@@ -30,7 +30,9 @@ struct ReminderScheduler {
         
         // Don't schedule if goal is met
         guard sipsRemaining > 0 else {
+            #if DEBUG
             print("[ReminderScheduler] Goal met, no reminders scheduled")
+            #endif
             return
         }
         
@@ -63,7 +65,9 @@ struct ReminderScheduler {
             )
         }
         
+        #if DEBUG
         print("[ReminderScheduler] Scheduled \(times.count) reminders")
+        #endif
     }
     
     /// Convenience: schedule from UserPreferences + remaining sip count
